@@ -1,5 +1,7 @@
 package ie.gmit.ds;
 
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -20,11 +22,11 @@ public class PasswordServiceClient {
                 .usePlaintext()
                 .build();
         syncPasswordService = PasswordServiceGrpc.newBlockingStub(channel);
-    }
+    } // PasswordServiceClient
 
     public void shutdown() throws InterruptedException {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-    }
+    } // shutdown
 
     public void hash(int userId, String password){
         logger.info("Hash request detail:\nUser ID: " + userId + "\nPassword: " + password);
@@ -32,32 +34,54 @@ public class PasswordServiceClient {
         HashRequest request =  HashRequest.newBuilder().setUserId(userId)
                 .setPassword(password).build();
 
-        //Create a response to read response from server and log it
-        HashResponse responce;
-
+        //Create a response to read the response from server and log it
+        HashResponse response;
         try{
-            responce = syncPasswordService.hash(request);
+            response = syncPasswordService.hash(request);
         }catch (StatusRuntimeException ex){
             logger.log(Level.WARNING, "RPC failed: {0}", ex.getStatus());
             return;
         }
-
-        logger.info("Response from server: " + responce.getUserId() + responce.getHashedPassword()
-                + responce.getSalt());
+        logger.info("Response from server: " + response);
     }
+    public void validate(String password, byte[] hashedPassword, byte[] salt) {
+        ValidateRequest request = ValidateRequest.newBuilder()
+                .setPassword(password)
+                .setHashedPassword(ByteString.copyFrom(hashedPassword))
+                .setSalt(ByteString.copyFrom(salt)).build();
 
+        BoolValue response;
+        try{
+            response  = syncPasswordService.validate(request);
+            logger.info("Response from server: " + response.getValue());
+            System.out.println(request);
+        } catch (StatusRuntimeException ex){
+            logger.log(Level.WARNING, "RPC failed: {0}", ex.getStatus());
+        } // try/catch
+    } // validate
 
-
+    /** Main method which runs the Client */
     public static void main(String[] args) throws InterruptedException {
         PasswordServiceClient client = new PasswordServiceClient("localhost", 50551);
 
         try {
-            client.hash(1234, "niema");
+            /** Testing the Hash method */
+            client.hash(55, "niema");
+            client.hash(12, "Hello");
+            client.hash(10, "Liverpool");
+            client.hash(176, "woooo");
+
+            /** Testing the Validate method
+             *
+             * validates requires a password, hashed passwords which is 'passwords' and 'salt' together and a salt
+             *
+             */
+            byte[] salt = Passwords.getNextSalt();
+            client.validate("niema", Passwords.hash("niema".toCharArray(), salt), salt);
 
         }finally {
             // Don't stop process, keep alive to receive async response
             Thread.currentThread().join();
-        }
-
-    }
-}
+        } // try/finally
+    } // main
+} // PasswordServiceClient
