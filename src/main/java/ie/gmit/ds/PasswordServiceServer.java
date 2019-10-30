@@ -42,5 +42,6 @@ public class PasswordServiceServer {
         final PasswordServiceServer passwordserviceServer = new PasswordServiceServer();
         passwordserviceServer.start();
         passwordserviceServer.blockUntilShutdown();
+
     }
 } // PasswordServiceServer

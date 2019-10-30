@@ -40,7 +40,9 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
         responseObserver.onNext(response);
         // Completing the request
         responseObserver.onCompleted();
-        System.out.println(request);
+        logger.info(request.toString());
+        logger.info(response.toString());
+
     } // Hash
 
     /**
@@ -59,5 +61,7 @@ public class PasswordServiceImpl extends PasswordServiceGrpc.PasswordServiceImpl
         );
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+        logger.info(request.toString());
+        logger.info(response.toString());
     } // Validate
 } // PasswordServiceImpl
