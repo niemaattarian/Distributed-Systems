@@ -29,7 +29,7 @@ public class PasswordServiceClient {
     } // shutdown
 
     public void hash(int userId, String password){
-        logger.info("Hash request detail:\nUser ID: " + userId + "\nPassword: " + password);
+        logger.info("Hash Request Detail \nUser ID: " + userId + "\nPassword: " + password);
         //Create a request to send to PasswordServiceImpl hash method
         HashRequest request =  HashRequest.newBuilder().setUserId(userId)
                 .setPassword(password).build();
@@ -53,7 +53,7 @@ public class PasswordServiceClient {
         BoolValue response;
         try{
             response  = syncPasswordService.validate(request);
-            logger.info("Response from server: " + response.getValue());
+            logger.info("Response from server: \n" + response.getValue());
             System.out.println(request);
         } catch (StatusRuntimeException ex){
             logger.log(Level.WARNING, "RPC failed: {0}", ex.getStatus());
@@ -69,7 +69,7 @@ public class PasswordServiceClient {
             client.hash(55, "niema");
             client.hash(12, "Hello");
             client.hash(10, "Liverpool");
-            client.hash(176, "woooo");
+            client.hash(176, "lol");
 
             /** Testing the Validate method
              *

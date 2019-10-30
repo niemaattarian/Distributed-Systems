@@ -39,8 +39,8 @@ public class PasswordServiceServer {
      * Main method runs the server.
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        final PasswordServiceServer inventoryServer = new PasswordServiceServer();
-        inventoryServer.start();
-        inventoryServer.blockUntilShutdown();
+        final PasswordServiceServer passwordserviceServer = new PasswordServiceServer();
+        passwordserviceServer.start();
+        passwordserviceServer.blockUntilShutdown();
     }
 } // PasswordServiceServer
