@@ -6,7 +6,7 @@ The purpose of this project is to gain a practical experience in inter-process c
 ### How to run the Service
 * Download the .jar from the release.
 * cd to the directory of the .jar file.
-* Run the following command: `java -jar user-account-service-1.0-SNAPSHOT.jar`
+* Run the following command: `java -jar user-account-service-1.0-SNAPSHOT.jar server` 
 * Link to SwaggerHub API: https://app.swaggerhub.com/apis/niemaattarian/UserService
 
 ### References
